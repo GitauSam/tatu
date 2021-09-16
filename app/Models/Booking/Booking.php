@@ -3,6 +3,7 @@
 namespace App\Models\Booking;
 
 use App\Models\Driver\Route;
+use App\Models\Payments\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ class Booking extends Model
 
     protected $fillable = [
         'user_id',
-        'route_id'
+        'route_id',
     ];
 
     public function user() {
@@ -22,5 +23,9 @@ class Booking extends Model
 
     public function route() {
         return $this->belongsTo(Route::class);
+    }
+
+    public function payments() {
+        return $this->hasMany(Payment::class);
     }
 }

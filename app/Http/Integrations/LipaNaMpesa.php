@@ -16,7 +16,7 @@ class LipaNaMpesa
 
     use Utils;
 
-    public function pay($amount, $accountReference, $route_id) 
+    public function pay($amount, $accountReference, $route_id, $booking_id) 
     {
         $transactionStatus = '20';
         Log::debug("breakpoint 1");
@@ -115,7 +115,7 @@ class LipaNaMpesa
                 'PartyA' => auth()->user()->phone_number,
                 'PartyB' => $paybillNo,
                 'PhoneNumber' => auth()->user()->phone_number,
-                'CallBackURL' => 'https://0038-197-232-77-192.ngrok.io/api/spush/cb',
+                'CallBackURL' => 'https://4695-41-139-130-105.ngrok.io/api/spush/cb',
                 'AccountReference' => '495632184',
                 'TransactionDesc' => $transactionDesc
             ];
@@ -136,6 +136,7 @@ class LipaNaMpesa
             $payment->mpesa_transaction_desc = $transactionDesc;
             $payment->mpesa_integration_request = json_encode($request_array);
             $payment->route_id = $route_id;
+            $payment->booking_id = $booking_id;
             $payment->save();
 
                             

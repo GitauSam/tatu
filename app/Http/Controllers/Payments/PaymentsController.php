@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Payments;
 use App\Http\Controllers\Controller;
 use App\Http\Integrations\LipaNaMpesa;
 use App\Models\Driver\Route;
+use App\Models\Payments\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -17,7 +18,27 @@ class PaymentsController extends Controller
      */
     public function index()
     {
-        //
+        $payments = Payment::where('id', '>', 0)->get();
+
+        $user = auth()->user();
+
+        if ($user->hasRole('admin')) {
+            $payments = Payment::all();
+        } else if ($user->hasRole('driver')) {
+            foreach ($payments as $payment) {
+                if ($payment->route->driver->user->id == auth()->user()->id) {
+                    array_push($payments, $payment);
+                }
+            }
+        } else {
+            foreach ($payments as $payment) {
+                if ($payment->route->driver->user->id == auth()->user()->id) {
+                    array_push($payments, $payment);
+                }
+            }
+        }
+
+        return view('dashboard.payments.index', ['payments' => $payments]);
     }
 
     /**
@@ -43,7 +64,7 @@ class PaymentsController extends Controller
 
             $route = Route::find($request->route_id);
             
-            if ($lipaNaMpesa->pay($route->price, '495632184', $route->id) == '30') {
+            if ($lipaNaMpesa->pay($route->price, '495632184', $route->id, $request->booking_id) == '30') {
                 return redirect()->route('booking.index')->with("Payment confirmed");
             }
 

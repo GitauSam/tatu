@@ -61,11 +61,16 @@
 							<nav class="horizontal-nav full-width horizontalNav-notprocessed">
 								<ul class="sf-menu">
 									<li class="current"><a href="index.html">Home</a></li>
-									<li><a href="about.html">About</a></li>
-									<li><a href="booking.php">Booking</a></li>
-									<li><a href="cars.html">Cars</a></li>
-									<li><a href="services.html">Services</a></li>
-									<li><a href="contacts.html">Contacts</a></li>
+									<li><a href="3">About</a></li>
+									<li><a href="#">Booking</a></li>
+									<li><a href="#">Cars</a></li>
+									<li><a href="#">Services</a></li>
+									<li><a href="#">Contacts</a></li>
+									@auth
+									@else
+										<li><a href="{{ route('login') }}">Login</a></li>
+										<li><a href="{{ route('register') }}">Register</a></li>
+									@endauth
 								</ul>
 							</nav>
 							<div class="clear"></div>

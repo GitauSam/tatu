@@ -44,6 +44,7 @@ class Payment extends Model
         'mpesa_callback_response_phone_number',
         'route_id', // p
         'user_id', // p
+        'booking_id',
         'paid'
     ];
 

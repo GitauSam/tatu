@@ -65,6 +65,8 @@ class DriverController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->assignRole('driver');
+
         Driver::create([
             'user_id' => $user->id,
             'id_number' => $request->id_number,

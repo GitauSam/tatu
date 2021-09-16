@@ -1,4 +1,4 @@
-{{-- dd($bookings) --}}
+{{-- dd($bookings[0]->payments[0]) --}}
 <x-dashboard-layout>
 <style>
         .tatu-btn {
@@ -106,7 +106,7 @@
                                     </td>
                                     <td class="py-3 px-6 text-left">
                                         <div class="flex items-center">
-                                            <span>{{ $booking->route->price }}</span>
+                                            <span>KES {{ $booking->route->price }}</span>
                                         </div>
                                     </td>
                                     <td class="py-3 px-6 text-left">
@@ -116,7 +116,11 @@
                                     </td>
                                     <td class="py-3 px-6 text-left">
                                         <div class="flex items-center">
-                                            <span>{{ $booking->route->driver->available }}</span>
+                                            @if($booking->route->driver->available == 1)
+                                                <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: green;">Available</button>
+                                            @else
+                                                <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: red;">Unavailable</button>
+                                            @endif
                                         </div>
                                     </td>
                                     <td class="py-3 px-6 text-left">
@@ -124,18 +128,32 @@
                                             <span>{{ $booking->route->driver->registration_number }}</span>
                                         </div>
                                     </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $booking->route->driver->capacity }}</span>
+                                    <td class="py-3 px-6 text-left" style="text-align: center;">
+                                        <div class="flex items-center" style="text-align: center;">
+                                            <span style="text-align: center;">{{ $booking->route->driver->capacity - count($booking->payments) }}</span>
                                         </div>
                                     </td>
                                     <td class="py-3 px-6 text-center">
                                         <div class="flex item-center justify-center">
-                                                <form action="{{ route('payment.store') }}" method="post">
-                                                    @csrf
-                                                    <input type="text" name="route_id" value="{{ $booking->route->id }}" hidden required />
-                                                    <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Pay</button>
-                                                </form>
+                                                @if(count($booking->payments) > 0)
+                                                    @if($booking->payments[0]->paid != 1)
+                                                        <form action="{{ route('payment.store') }}" method="post">
+                                                            @csrf
+                                                            <input type="text" name="route_id" value="{{ $booking->route->id }}" hidden required />
+                                                            <input type="text" name="booking_id" value="{{ $booking->id }}" hidden required />
+                                                            <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Pay</button>
+                                                        </form>
+                                                    @else
+                                                        <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: green;">Paid</button>
+                                                    @endif
+                                                @else
+                                                    <form action="{{ route('payment.store') }}" method="post">
+                                                        @csrf
+                                                        <input type="text" name="route_id" value="{{ $booking->route->id }}" hidden required />
+                                                        <input type="text" name="booking_id" value="{{ $booking->id }}" hidden required />
+                                                        <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Pay</button>
+                                                    </form>
+                                                @endif
                                             <!-- </div> -->
                                         </div>
                                     </td>
