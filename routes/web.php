@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Driver\DriverController;
+use App\Http\Controllers\Driver\DriverUserController;
+use App\Http\Controllers\Passenger\BookingController;
+use App\Http\Controllers\Passenger\PassengerController;
+use App\Http\Controllers\Payments\PaymentsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -46,4 +50,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('driver', DriverController::class);
+    Route::resource('driver-user', DriverUserController::class);
+    Route::resource('passenger', PassengerController::class);
+    Route::resource('booking', BookingController::class);
+    Route::resource('payment', PaymentsController::class);
 });

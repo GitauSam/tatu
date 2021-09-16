@@ -39,10 +39,28 @@
                     <span class="links_name">Add Driver</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('driver.index') }}">
+                    <i class='bx bx-box'></i>
+                    <span class="links_name">View Drivers</span>
+                </a>
+            </li>
             @endif
             @if(auth()->user()->hasRole('driver'))
+                <li>
+                    <a href="{{ route('driver-user.index') }}">
+                        <i class='bx bx-box'></i>
+                        <span class="links_name">Vehicles</span>
+                    </a>
+                </li>
             @endif
             @if(auth()->user()->hasRole('user'))
+                <li>
+                    <a href="{{ route('passenger.index') }}">
+                        <i class='bx bx-box'></i>
+                        <span class="links_name">Book Vehicle</span>
+                    </a>
+                </li>
             @endif
             <!-- <li>
                 <a href="#">
@@ -99,10 +117,18 @@
                 </a>
             </li> -->
             <li class="log_out">
-                <a href="#">
-                    <i class='bx bx-log-out'></i>
-                    <span class="links_name">Log out</span>
-                </a>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                        this.closest('form').submit();"
+                    >
+                        <i class='bx bx-log-out'></i>
+                        <span class="links_name">Log out</span>
+                    </a>
+                </form>
+                
             </li>
         </ul>
     </div>
