@@ -58,7 +58,13 @@
                 <li>
                     <a href="{{ route('passenger.index') }}">
                         <i class='bx bx-box'></i>
-                        <span class="links_name">Book Vehicle</span>
+                        <span class="links_name">View Vehicles</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('booking.index') }}">
+                        <i class='bx bx-box'></i>
+                        <span class="links_name">View Bookings</span>
                     </a>
                 </li>
             @endif

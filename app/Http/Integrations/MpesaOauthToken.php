@@ -12,8 +12,8 @@ class MpesaOauthToken{
 
             $token = Http::withBasicAuth
                             (
-                                "BteaF3T19ttjzrJvE0Va5f6SuPMlTWjt", 
-                                "6XXLVsZ6YQMJh5ct"
+                                "HN2r3MJYWsv2AcChas3XgiPplWKiyAh4", 
+                                "AIe4UmUGtQUtTEGz"
                             )
                             ->get("https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials")
                             ->json()['access_token'];

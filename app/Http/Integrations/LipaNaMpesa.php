@@ -128,12 +128,10 @@ class LipaNaMpesa
             $payment->mpesa_password_status = '0';
             $payment->mpesa_request_timestamp = $currentTime;
             $payment->mpesa_request_timestamp_status = '0';
-            // $payment->mpesa_party_a = auth()->user()->phone_number;
-            $payment->mpesa_party_a = "25474620652";
+            $payment->mpesa_party_a = auth()->user()->phone_number;
             $payment->mpesa_party_b = $paybillNo;
             $payment->mpesa_transaction_type = 'CustomerPayBillOnline';
-            // $payment->mpesa_sender_msisdn = auth()->user()->phone_number;
-            $payment->mpesa_sender_msisdn = "25474620652";
+            $payment->mpesa_sender_msisdn = auth()->user()->phone_number;
             $payment->mpesa_account_ref = '495632184';
             $payment->mpesa_transaction_desc = $transactionDesc;
             $payment->mpesa_integration_request = json_encode($request_array);
