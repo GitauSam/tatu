@@ -16,7 +16,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::where('user_id', '=', auth()->user()->id)->paginate(10);
+        $bookings = Booking::where('user_id', '=', auth()->user()->id)->where('status', 1)->paginate(10);
 
         return view('dashboard.booking.index', ['bookings' => $bookings]);
     }
@@ -40,17 +40,21 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), [
-            'route_id' => ['required', 'string', 'max:1'],
+            'route_id' => ['required', 'string'],
         ])->validate();
+
+        if (Booking::where('user_id', auth()->user()->id)->where('status', 1)->where('route_id', $request->route_id)->exists())
+            return redirect()->back()->with('failed', 'Booking already exists');
 
         $booking = Booking::create(
             [
                 'user_id' => auth()->user()->id,
-                'route_id' => $request->route_id
+                'route_id' => $request->route_id,
+                'status' => 1
             ]
         );
 
-        return redirect()->route('booking.index');
+        return redirect()->route('booking.index')->with('success', "Booking created successfully");
     }
 
     /**

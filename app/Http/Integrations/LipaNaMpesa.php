@@ -44,7 +44,7 @@ class LipaNaMpesa
 
             Log::debug("breakpoint 5");
 
-            $paybillNo = 174379;
+            $paybillNo = env('MPESA_PAYBILL_NUMBER');
 
             Log::debug("breakpoint 6");
 
@@ -67,7 +67,7 @@ class LipaNaMpesa
                                                 'base64', 
                                                 array(
                                                     $paybillNo,
-                                                    "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919",
+                                                    env("MPESA_PASS_KEY"),
                                                     $currentTime
                                                 )
                                             );
@@ -110,13 +110,13 @@ class LipaNaMpesa
                 'BusinessShortCode' => $paybillNo,
                 'Password' => $password,
                 'Timestamp' => $currentTime,
-                'TransactionType' => 'CustomerPayBillOnline',
+                'TransactionType' => env('MPESA_TRANSACTION_TYPE'),
                 'Amount' => $amount,
                 'PartyA' => auth()->user()->phone_number,
                 'PartyB' => $paybillNo,
                 'PhoneNumber' => auth()->user()->phone_number,
-                'CallBackURL' => 'https://4695-41-139-130-105.ngrok.io/api/spush/cb',
-                'AccountReference' => '495632184',
+                'CallBackURL' => env('MPESA_CALLBACK_URL'),
+                'AccountReference' => env('MPESA_ACCOUNT_REF'),
                 'TransactionDesc' => $transactionDesc
             ];
 
@@ -130,9 +130,9 @@ class LipaNaMpesa
             $payment->mpesa_request_timestamp_status = '0';
             $payment->mpesa_party_a = auth()->user()->phone_number;
             $payment->mpesa_party_b = $paybillNo;
-            $payment->mpesa_transaction_type = 'CustomerPayBillOnline';
+            $payment->mpesa_transaction_type = env('MPESA_TRANSACTION_TYPE');
             $payment->mpesa_sender_msisdn = auth()->user()->phone_number;
-            $payment->mpesa_account_ref = '495632184';
+            $payment->mpesa_account_ref = env('MPESA_ACCOUNT_REF');
             $payment->mpesa_transaction_desc = $transactionDesc;
             $payment->mpesa_integration_request = json_encode($request_array);
             $payment->route_id = $route_id;

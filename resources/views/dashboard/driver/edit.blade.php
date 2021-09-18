@@ -159,7 +159,7 @@
             </div>
             <!-- sticky footer -->
             <footer class="flex justify-center px-8 pb-8 pt-4 mt-4 bg-red-500" style="margin: 1rem 0 3rem 0;">
-                <button id="submit" class="tatu-btn">
+                <button id="submit" class="tatu-btn rounded-lg">
                     Update Driver
                 </button>
             </footer>

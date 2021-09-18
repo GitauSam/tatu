@@ -1,6 +1,6 @@
-{{-- dd($drivers[0]->route) --}}
+{{-- dd($drivers[0]->route->bookings) --}}
 <x-dashboard-layout>
-<style>
+    <style>
         .tatu-btn {
             pointer-events: auto;
             cursor: pointer;
@@ -77,75 +77,80 @@
     <div class="home-content">
         <div class="bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-hidden" style="margin: 3rem 3rem 0 3rem;">
             <div class="w-full lg:w-5/6">
+                @if(session('failed'))
+                <div class="alert" style="background-color: red;">
+                    {{ session('failed') }}
+                </div>
+                @endif
+                <x-jet-validation-errors class="mb-4" />
                 <div class="bg-white shadow-md rounded my-6">
                     <table class="min-w-max w-full table-auto">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-6 text-left">Start Point</th>
-                                <th class="py-3 px-6 text-left">Destination</th>
-                                <th class="py-3 px-6 text-center">Price</th>
-                                <th class="py-3 px-6 text-center">Capacity</th>
-                                <th class="py-3 px-6 text-center">Available</th>
-                                <th class="py-3 px-6 text-center">Registration Number</th>
-                                <th class="py-3 px-6 text-center">Slots Remaining</th>
-                                <th class="py-3 px-6 text-center">Actions</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Capacity</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Available</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Registration Number</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Slots Remaining</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
                             @foreach($drivers as $driver)
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <span class="font-medium">{{ $driver->route->start_point }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $driver->route->destination }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $driver->route->price }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $driver->capacity }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $driver->available }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $driver->registration_number }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $driver->capacity }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-center">
-                                        <div class="flex item-center justify-center">
-                                            <!-- <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"> -->
-                                                <!-- <a href="{{ route('driver.edit', $driver->id) }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                    </svg>
-                                                </a> -->
-                                                <form action="{{ route('booking.store') }}" method="post">
-                                                    @csrf
-                                                    <input type="text" name="route_id" value="{{ $driver->route->id }}" hidden required />
-                                                    <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Book</button>
-                                                </form>
-                                            <!-- </div> -->
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium" style="margin: 0 auto;">{{ $driver->route->start_point }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $driver->route->destination }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">KES {{ $driver->route->price }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $driver->capacity }} Seats</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">
+                                            @if($driver->available == 1)
+                                            <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: green;">Available</div>
+                                            @else
+                                            <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: red;">N/A</div>
+                                            @endif
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $driver->registration_number }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $driver->capacity - count($driver->route->bookings) }} Seats</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex item-center justify-center">
+                                        <form action="{{ route('booking.store') }}" method="post">
+                                            @csrf
+                                            <input type="text" name="route_id" value="{{ $driver->route->id }}" hidden required />
+                                            <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Book</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

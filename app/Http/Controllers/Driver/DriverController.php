@@ -76,7 +76,7 @@ class DriverController extends Controller
             'status' => 1
         ]);
 
-        return redirect()->route('driver.index')->with('Driver created successfully');
+        return redirect()->route('driver.index')->with('success', 'Driver created successfully');
     }
 
     /**
@@ -139,7 +139,7 @@ class DriverController extends Controller
 
         $driver->save();
 
-        return redirect()->route('driver.index')->with('Driver updated successfully');
+        return redirect()->route('driver.index')->with('success', 'Driver updated successfully');
     }
 
     /**

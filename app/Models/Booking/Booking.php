@@ -15,6 +15,7 @@ class Booking extends Model
     protected $fillable = [
         'user_id',
         'route_id',
+        'status'
     ];
 
     public function user() {

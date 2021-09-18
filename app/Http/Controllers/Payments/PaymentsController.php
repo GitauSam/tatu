@@ -8,6 +8,7 @@ use App\Models\Driver\Route;
 use App\Models\Payments\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class PaymentsController extends Controller
 {
@@ -18,27 +19,28 @@ class PaymentsController extends Controller
      */
     public function index()
     {
-        $payments = Payment::where('id', '>', 0)->get();
+        $p = [];
 
         $user = auth()->user();
 
         if ($user->hasRole('admin')) {
             $payments = Payment::all();
+            return view('dashboard.payments.index', ['payments' => $payments]);
         } else if ($user->hasRole('driver')) {
-            foreach ($payments as $payment) {
+            foreach (Payment::all() as $payment) {
                 if ($payment->route->driver->user->id == auth()->user()->id) {
-                    array_push($payments, $payment);
+                    array_push($p, $payment);
                 }
             }
         } else {
-            foreach ($payments as $payment) {
-                if ($payment->route->driver->user->id == auth()->user()->id) {
-                    array_push($payments, $payment);
+            foreach (Payment::all() as $payment) {
+                if ($payment->user_id == auth()->user()->id) {
+                    array_push($p, $payment);
                 }
             }
         }
 
-        return view('dashboard.payments.index', ['payments' => $payments]);
+        return view('dashboard.payments.index', ['payments' => $p]);
     }
 
     /**
@@ -59,19 +61,28 @@ class PaymentsController extends Controller
      */
     public function store(Request $request)
     {
+        Validator::make($request->all(), [
+            'route_id' => ['required', 'string'],
+            'booking_id' => ['required', 'string'],
+        ])->validate();
+        
         try {
+
+            if (Payment::where('booking_id', $request->booking_id)->whereNotNull('mpesa_callback_response_status')->where('mpesa_callback_response_status', '0')->exists())
+                return redirect()->back()->with('failed', 'This booking has already been paid for');
+
             $lipaNaMpesa = new LipaNaMpesa();
 
             $route = Route::find($request->route_id);
             
             if ($lipaNaMpesa->pay($route->price, '495632184', $route->id, $request->booking_id) == '30') {
-                return redirect()->route('booking.index')->with("Payment confirmed");
+                return redirect()->route('booking.index')->with('success', "Payment initiated successfully. Please enter your pin to confirm booking.");
             }
 
         } catch (\Exception $e) {
             Log::debug("Exception occurred when attempting to pay with mpesa");
             Log::debug("Cause: " . $e->getMessage());
-            return redirect()->route('booking.index')->with("Unable to confirm payment");
+            return redirect()->route('booking.index')->with('failed', "Unable to confirm payment");
         }
     }
 

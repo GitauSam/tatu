@@ -81,10 +81,12 @@
                     <table class="min-w-max w-full table-auto">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-6 text-left">Start Point</th>
-                                <th class="py-3 px-6 text-left">Destination</th>
-                                <th class="py-3 px-6 text-center">Price</th>
-                                <th class="py-3 px-6 text-center">Date Paid</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Vehicle</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Remarks</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Date Paid</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
@@ -92,17 +94,31 @@
                                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                                     <td class="py-3 px-6 text-left whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <span class="font-medium">{{ $payment->route->start_point }}</span>
+                                            <span class="font-medium" style="margin: 0 auto;">{{ $payment->route->start_point }}</span>
                                         </div>
                                     </td>
                                     <td class="py-3 px-6 text-center" style="text-align: center;">
                                         <div class="flex items-center">
-                                            <span>{{ $payment->route->destination }}</span>
+                                            <span style="margin: 0 auto;">{{ $payment->route->destination }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-6 text-center" style="text-align: center;">
+                                        <div class="flex items-center">
+                                            <span style="margin: 0 auto;">{{ $payment->route->driver->registration_number }}</span>
                                         </div>
                                     </td>
                                     <td class="py-3 px-6 text-center" style="text-align: center;">
                                         <div class="flex items-center" style="text-align: center;">
                                             <span style="margin: 0 auto;">KES {{ $payment->route->price }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-6 text-center" style="text-align: center;">
+                                        <div class="flex items-center">
+                                            @if($payment->mpesa_callback_result_code == 0)
+                                                <span style="margin: 0 auto; background-color: green;" class="tatu-btn rounded-lg">{{ $payment->mpesa_callback_result_desc }}</span>
+                                            @else
+                                                <span style="margin: 0 auto; background-color: red;" class="tatu-btn rounded-lg">{{ $payment->mpesa_callback_result_desc }}</span>
+                                            @endif
                                         </div>
                                     </td>
                                     <td class="py-3 px-6 text-center">

@@ -66,7 +66,9 @@ class CallbackController extends Controller
         $payment->mpesa_callback_result_desc = $validated['Body']['stkCallback']['ResultDesc'];
         $payment->mpesa_callback_response = json_encode($validated);
         $payment->mpesa_callback_response_transaction_date = Carbon::now()->format('Y-m-d H:i:s');
-        $payment->paid = 1;
+        
+        if ($validated['Body']['stkCallback']['ResultCode'] == 0)
+            $payment->paid = 1;
 
         Log::debug('breakpoint 204');
 

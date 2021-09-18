@@ -2,6 +2,7 @@
 
 namespace App\Models\Driver;
 
+use App\Models\Booking\Booking;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,5 +20,9 @@ class Route extends Model
 
     public function driver() {
         return $this->belongsTo(Driver::class);
+    }
+
+    public function bookings() {
+        return $this->hasMany(Booking::class);
     }
 }

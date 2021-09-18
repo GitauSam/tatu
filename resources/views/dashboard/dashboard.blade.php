@@ -1,167 +1,447 @@
 <x-dashboard-layout>
     <div class="home-content">
+        @if(auth()->user()->hasRole('user'))
         <div class="overview-boxes">
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Total Order</div>
-                    <div class="number">40,876</div>
+                    <div class="box-topic">Total Bookings</div>
+                    <div class="number">{{ $totalBookingsCount }}</div>
                     <div class="indicator">
-                        <i class='bx bx-up-arrow-alt'></i>
-                        <span class="text">Up from yesterday</span>
+                        <!-- <i class='bx bx-up-arrow-alt'></i> -->
+                        <i class="fas fa-info"></i>
+                        <span class="text">Total bookings count</span>
                     </div>
                 </div>
                 <i class='bx bx-cart-alt cart'></i>
             </div>
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Total Sales</div>
-                    <div class="number">38,876</div>
+                    <div class="box-topic">Total Payment</div>
+                    <div class="number">KES {{ $totalPaymentAmount }}</div>
                     <div class="indicator">
-                        <i class='bx bx-up-arrow-alt'></i>
-                        <span class="text">Up from yesterday</span>
+                        <!-- <i class='bx bx-up-arrow-alt'></i> -->
+                        <i class="fas fa-info"></i>
+                        <span class="text">Total successful payments</span>
                     </div>
                 </div>
                 <i class='bx bxs-cart-add cart two'></i>
             </div>
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Total Profit</div>
-                    <div class="number">$12,876</div>
+                    <div class="box-topic">Total Vehicles Available</div>
+                    <div class="number">{{ $totalDriversCount }}</div>
                     <div class="indicator">
-                        <i class='bx bx-up-arrow-alt'></i>
-                        <span class="text">Up from yesterday</span>
+                        <!-- <i class='bx bx-up-arrow-alt'></i> -->
+                        <i class="fas fa-info"></i>
+                        <span class="text">Total number of available vehicles</span>
                     </div>
                 </div>
                 <i class='bx bx-cart cart three'></i>
             </div>
+        </div>
+        @endif
+
+        @if(auth()->user()->hasRole('driver'))
+        <div class="overview-boxes">
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Total Return</div>
-                    <div class="number">11,086</div>
+                    <div class="box-topic">Total Payment</div>
+                    <div class="number">KES {{ $totalPaymentAmount }}</div>
                     <div class="indicator">
-                        <i class='bx bx-down-arrow-alt down'></i>
-                        <span class="text">Down From Today</span>
+                        <!-- <i class='bx bx-up-arrow-alt'></i> -->
+                        <i class="fas fa-info"></i>
+                        <span class="text">Total successful payments</span>
                     </div>
                 </div>
-                <i class='bx bxs-cart-download cart four'></i>
+                <i class='bx bxs-cart-add cart two'></i>
+            </div>
+            <div class="box">
+                <div class="right-side">
+                    <div class="box-topic">Total Bookings</div>
+                    <div class="number">{{ $totalBookingsCount }}</div>
+                    <div class="indicator">
+                        <!-- <i class='bx bx-up-arrow-alt'></i> -->
+                        <i class="fas fa-info"></i>
+                        <span class="text">Total bookings count</span>
+                    </div>
+                </div>
+                <i class='bx bx-cart-alt cart'></i>
+            </div>
+            <!-- <div class="box">
+                <div class="right-side">
+                    <div class="box-topic">Total Vehicles Available</div>
+                    <div class="number">{{-- $totalDriversCount --}}</div>
+                    <div class="indicator">
+                        <i class='bx bx-up-arrow-alt'></i> -->
+                        <!-- <i class="fas fa-info"></i>
+                        <span class="text">Total number of available vehicles</span>
+                    </div>
+                </div>
+                <i class='bx bx-cart cart three'></i> -->
+            <!-- </div> -->
+        </div>
+        @endif
+
+        @if(auth()->user()->hasRole('admin'))
+        <div class="overview-boxes">
+            <div class="box">
+                <div class="right-side">
+                    <div class="box-topic">Total Bookings</div>
+                    <div class="number">{{ $totalBookingsCount }}</div>
+                    <div class="indicator">
+                        <!-- <i class='bx bx-up-arrow-alt'></i> -->
+                        <i class="fas fa-info"></i>
+                        <span class="text">Total bookings count</span>
+                    </div>
+                </div>
+                <i class='bx bx-cart-alt cart'></i>
+            </div>
+            <div class="box">
+                <div class="right-side">
+                    <div class="box-topic">Total Payment</div>
+                    <div class="number">KES {{ $totalPaymentAmount }}</div>
+                    <div class="indicator">
+                        <!-- <i class='bx bx-up-arrow-alt'></i> -->
+                        <i class="fas fa-info"></i>
+                        <span class="text">Total successful payments</span>
+                    </div>
+                </div>
+                <i class='bx bxs-cart-add cart two'></i>
+            </div>
+            <div class="box">
+                <div class="right-side">
+                    <div class="box-topic">Total Vehicles Available</div>
+                    <div class="number">{{ $totalDriversCount }}</div>
+                    <div class="indicator">
+                        <!-- <i class='bx bx-up-arrow-alt'></i> -->
+                        <i class="fas fa-info"></i>
+                        <span class="text">Total number of available vehicles</span>
+                    </div>
+                </div>
+                <i class='bx bx-cart cart three'></i>
             </div>
         </div>
+        @endif
 
+        @if(auth()->user()->hasRole('user'))
         <div class="sales-boxes">
             <div class="recent-sales box">
-                <div class="title">Recent Sales</div>
+                <div class="title">Recent Payments</div>
                 <div class="sales-details">
-                    <ul class="details">
-                        <li class="topic">Date</li>
-                        <li><a href="#">02 Jan 2021</a></li>
-                        <li><a href="#">02 Jan 2021</a></li>
-                        <li><a href="#">02 Jan 2021</a></li>
-                        <li><a href="#">02 Jan 2021</a></li>
-                        <li><a href="#">02 Jan 2021</a></li>
-                        <li><a href="#">02 Jan 2021</a></li>
-                        <li><a href="#">02 Jan 2021</a></li>
-                    </ul>
-                    <ul class="details">
-                        <li class="topic">Customer</li>
-                        <li><a href="#">Alex Doe</a></li>
-                        <li><a href="#">David Mart</a></li>
-                        <li><a href="#">Roe Parter</a></li>
-                        <li><a href="#">Diana Penty</a></li>
-                        <li><a href="#">Martin Paw</a></li>
-                        <li><a href="#">Doe Alex</a></li>
-                        <li><a href="#">Aiana Lexa</a></li>
-                        <li><a href="#">Rexel Mags</a></li>
-                        <li><a href="#">Tiana Loths</a></li>
-                    </ul>
-                    <ul class="details">
-                        <li class="topic">Sales</li>
-                        <li><a href="#">Delivered</a></li>
-                        <li><a href="#">Pending</a></li>
-                        <li><a href="#">Returned</a></li>
-                        <li><a href="#">Delivered</a></li>
-                        <li><a href="#">Pending</a></li>
-                        <li><a href="#">Returned</a></li>
-                        <li><a href="#">Delivered</a></li>
-                        <li><a href="#">Pending</a></li>
-                        <li><a href="#">Delivered</a></li>
-                    </ul>
-                    <ul class="details">
-                        <li class="topic">Total</li>
-                        <li><a href="#">$204.98</a></li>
-                        <li><a href="#">$24.55</a></li>
-                        <li><a href="#">$25.88</a></li>
-                        <li><a href="#">$170.66</a></li>
-                        <li><a href="#">$56.56</a></li>
-                        <li><a href="#">$44.95</a></li>
-                        <li><a href="#">$67.33</a></li>
-                        <li><a href="#">$23.53</a></li>
-                        <li><a href="#">$46.52</a></li>
-                    </ul>
-                </div>
-                <div class="button">
-                    <a href="#">See All</a>
+                    <table class="min-w-max w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Vehicle</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Remarks</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Date Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm font-light">
+                            @foreach($bookings as $booking)
+                            @foreach($booking->payments as $payment)
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium" style="margin: 0 auto;">{{ $payment->route->start_point }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->route->destination }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->route->driver->registration_number }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center" style="text-align: center;">
+                                        <span style="margin: 0 auto;">KES {{ $payment->route->price }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->mpesa_callback_result_desc }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex items-center" style="text-align: center;">
+                                        <span style="margin: 0 auto;">{{ $payment->updated_at }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="top-sales box">
-                <div class="title">Top Seling Product</div>
-                <ul class="top-sales-details">
-                    <li>
-                        <a href="#">
-                            <!--<img src="images/sunglasses.jpg" alt="">-->
-                            <span class="product">Vuitton Sunglasses</span>
-                        </a>
-                        <span class="price">$1107</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <!--<img src="images/jeans.jpg" alt="">-->
-                            <span class="product">Hourglass Jeans </span>
-                        </a>
-                        <span class="price">$1567</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <!-- <img src="images/nike.jpg" alt="">-->
-                            <span class="product">Nike Sport Shoe</span>
-                        </a>
-                        <span class="price">$1234</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <!--<img src="images/scarves.jpg" alt="">-->
-                            <span class="product">Hermes Silk Scarves.</span>
-                        </a>
-                        <span class="price">$2312</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <!--<img src="images/blueBag.jpg" alt="">-->
-                            <span class="product">Succi Ladies Bag</span>
-                        </a>
-                        <span class="price">$1456</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <!--<img src="images/bag.jpg" alt="">-->
-                            <span class="product">Gucci Womens's Bags</span>
-                        </a>
-                        <span class="price">$2345</span>
-                    <li>
-                        <a href="#">
-                            <!--<img src="images/addidas.jpg" alt="">-->
-                            <span class="product">Addidas Running Shoe</span>
-                        </a>
-                        <span class="price">$2345</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <!--<img src="images/shirt.jpg" alt="">-->
-                            <span class="product">Bilack Wear's Shirt</span>
-                        </a>
-                        <span class="price">$1245</span>
-                    </li>
-                </ul>
+                <div class="title">Booking</div>
+                <table class="min-w-max w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                            <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                            <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                            <th class="py-3 px-6 text-center" style="text-align: center;">Slots Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm font-light">
+                        @foreach($bookings as $booking)
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="font-medium" style="margin: 0 auto;">{{ $booking->route->start_point }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <div class="flex items-center">
+                                    <span style="margin: 0 auto;">{{ $booking->route->destination }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <div class="flex items-center">
+                                    <span style="margin: 0 auto;">KES {{ $booking->route->price }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left" style="text-align: center;">
+                                <div class="flex items-center" style="text-align: center;">
+                                    <span style="margin: 0 auto;">{{ $booking->route->driver->capacity - count($booking->payments) }} Seats</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
+        @endif
+
+        @if(auth()->user()->hasRole('driver'))
+        <div class="sales-boxes">
+            <div class="recent-sales box">
+                <div class="title">Recent Payments</div>
+                <div class="sales-details">
+                    <table class="min-w-max w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Name</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Vehicle</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Remarks</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Date Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm font-light">
+                            @foreach($bookings as $booking)
+                            @foreach($booking->payments as $payment)
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium" style="margin: 0 auto;">{{ $booking->user->name }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium" style="margin: 0 auto;">{{ $payment->route->start_point }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->route->destination }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->route->driver->registration_number }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center" style="text-align: center;">
+                                        <span style="margin: 0 auto;">KES {{ $payment->route->price }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->mpesa_callback_result_desc }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex items-center" style="text-align: center;">
+                                        <span style="margin: 0 auto;">{{ $payment->updated_at }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="top-sales box">
+                <div class="title">Bookings</div>
+                <table class="min-w-max w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left" style="text-align: center;">Name</th>
+                            <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                            <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                            <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                            <th class="py-3 px-6 text-center" style="text-align: center;">Slots Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm font-light">
+                        @foreach($bookings as $booking)
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="font-medium" style="margin: 0 auto;">{{ $booking->user->name }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="font-medium" style="margin: 0 auto;">{{ $booking->route->start_point }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <div class="flex items-center">
+                                    <span style="margin: 0 auto;">{{ $booking->route->destination }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <div class="flex items-center">
+                                    <span style="margin: 0 auto;">KES {{ $booking->route->price }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left" style="text-align: center;">
+                                <div class="flex items-center" style="text-align: center;">
+                                    <span style="margin: 0 auto;">{{ $booking->route->driver->capacity - count($booking->payments) }} Seats</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
+
+        @if(auth()->user()->hasRole('admin'))
+        <div class="sales-boxes">
+            <div class="recent-sales box">
+                <div class="title">Recent Payments</div>
+                <div class="sales-details">
+                    <table class="min-w-max w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Name</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Vehicle</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Remarks</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Date Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm font-light">
+                            @foreach($bookings as $booking)
+                            @foreach($booking->payments as $payment)
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium" style="margin: 0 auto;">{{ $booking->user->name }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium" style="margin: 0 auto;">{{ $payment->route->start_point }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->route->destination }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->route->driver->registration_number }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center" style="text-align: center;">
+                                        <span style="margin: 0 auto;">KES {{ $payment->route->price }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center" style="text-align: center;">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $payment->mpesa_callback_result_desc }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex items-center" style="text-align: center;">
+                                        <span style="margin: 0 auto;">{{ $payment->updated_at }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="top-sales box">
+                <div class="title">Bookings</div>
+                <table class="min-w-max w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left" style="text-align: center;">Name</th>
+                            <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                            <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                            <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                            <th class="py-3 px-6 text-center" style="text-align: center;">Slots Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm font-light">
+                        @foreach($bookings as $booking)
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="font-medium" style="margin: 0 auto;">{{ $booking->user->name }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="font-medium" style="margin: 0 auto;">{{ $booking->route->start_point }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <div class="flex items-center">
+                                    <span style="margin: 0 auto;">{{ $booking->route->destination }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <div class="flex items-center">
+                                    <span style="margin: 0 auto;">KES {{ $booking->route->price }}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left" style="text-align: center;">
+                                <div class="flex items-center" style="text-align: center;">
+                                    <span style="margin: 0 auto;">{{ $booking->route->driver->capacity - count($booking->payments) }} Seats</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
     </div>
 </x-dashboard-layout>

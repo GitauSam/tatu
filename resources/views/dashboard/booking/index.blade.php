@@ -1,6 +1,6 @@
-{{-- dd($bookings[0]->payments[0]) --}}
+{{-- dd($status) --}}
 <x-dashboard-layout>
-<style>
+    <style>
         .tatu-btn {
             pointer-events: auto;
             cursor: pointer;
@@ -77,87 +77,99 @@
     <div class="home-content">
         <div class="bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-hidden" style="margin: 3rem 3rem 0 3rem;">
             <div class="w-full lg:w-5/6">
+                @if (session('success'))
+                <div class="alert">
+                    <!-- <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> -->
+                    {{ session('success') }}
+                </div>
+                @endif
+
+                @if(session('failed'))
+                <div class="alert" style="background-color: red;">
+                    {{ session('failed') }}
+                </div>
+                @endif
+                <x-jet-validation-errors class="mb-4" />
                 <div class="bg-white shadow-md rounded my-6">
                     <table class="min-w-max w-full table-auto">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-6 text-left">Start Point</th>
-                                <th class="py-3 px-6 text-left">Destination</th>
-                                <th class="py-3 px-6 text-center">Price</th>
-                                <th class="py-3 px-6 text-center">Capacity</th>
-                                <th class="py-3 px-6 text-center">Available</th>
-                                <th class="py-3 px-6 text-center">Registration Number</th>
-                                <th class="py-3 px-6 text-center">Slots Remaining</th>
-                                <th class="py-3 px-6 text-center">Actions</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Start Point</th>
+                                <th class="py-3 px-6 text-left" style="text-align: center;">Destination</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Price</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Capacity</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Available</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Registration Number</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Slots Remaining</th>
+                                <th class="py-3 px-6 text-center" style="text-align: center;">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
                             @foreach($bookings as $booking)
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <span class="font-medium">{{ $booking->route->start_point }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $booking->route->destination }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>KES {{ $booking->route->price }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $booking->route->driver->capacity }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            @if($booking->route->driver->available == 1)
-                                                <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: green;">Available</button>
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium" style="margin: 0 auto;">{{ $booking->route->start_point }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $booking->route->destination }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">KES {{ $booking->route->price }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $booking->route->driver->capacity }} Seats</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        @if($booking->route->driver->available == 1)
+                                        <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: green; margin: 0 auto;">Available</button>
+                                        @else
+                                        <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: red; margin: 0 auto;">Unavailable</button>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="flex items-center">
+                                        <span style="margin: 0 auto;">{{ $booking->route->driver->registration_number }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left" style="text-align: center;">
+                                    <div class="flex items-center" style="text-align: center;">
+                                        <span style="margin: 0 auto;">{{ $booking->route->driver->capacity - count($booking->payments) }} Seats</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex item-center justify-center">
+                                        @if(count($booking->payments) > 0)
+                                        @if($booking->payments[count($booking->payments) - 1]->paid != 1)
+                                        <form action="{{ route('payment.store') }}" method="post">
+                                            @csrf
+                                            <input type="text" name="route_id" value="{{ $booking->route->id }}" hidden required />
+                                            <input type="text" name="booking_id" value="{{ $booking->id }}" hidden required />
+                                            <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Pay</button>
+                                        </form>
+                                        @else
+                                        <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: green;">Paid</button>
+                                            @endif
                                             @else
-                                                <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: red;">Unavailable</button>
+                                            <form action="{{ route('payment.store') }}" method="post">
+                                                @csrf
+                                                <input type="text" name="route_id" value="{{ $booking->route->id }}" hidden required />
+                                                <input type="text" name="booking_id" value="{{ $booking->id }}" hidden required />
+                                                <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Pay</button>
+                                            </form>
                                             @endif
                                         </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left">
-                                        <div class="flex items-center">
-                                            <span>{{ $booking->route->driver->registration_number }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-left" style="text-align: center;">
-                                        <div class="flex items-center" style="text-align: center;">
-                                            <span style="text-align: center;">{{ $booking->route->driver->capacity - count($booking->payments) }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-6 text-center">
-                                        <div class="flex item-center justify-center">
-                                                @if(count($booking->payments) > 0)
-                                                    @if($booking->payments[0]->paid != 1)
-                                                        <form action="{{ route('payment.store') }}" method="post">
-                                                            @csrf
-                                                            <input type="text" name="route_id" value="{{ $booking->route->id }}" hidden required />
-                                                            <input type="text" name="booking_id" value="{{ $booking->id }}" hidden required />
-                                                            <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Pay</button>
-                                                        </form>
-                                                    @else
-                                                        <div class="tatu-btn block bg-green-500 text-black font-bold p-4 rounded-lg" style="background-color: green;">Paid</button>
-                                                    @endif
-                                                @else
-                                                    <form action="{{ route('payment.store') }}" method="post">
-                                                        @csrf
-                                                        <input type="text" name="route_id" value="{{ $booking->route->id }}" hidden required />
-                                                        <input type="text" name="booking_id" value="{{ $booking->id }}" hidden required />
-                                                        <button class="tatu-btn block bg-blue-500 text-black font-bold p-4 rounded-lg">Pay</button>
-                                                    </form>
-                                                @endif
-                                            <!-- </div> -->
-                                        </div>
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Driver\Driver;
 use App\Models\Driver\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class DriverUserController extends Controller
@@ -17,9 +18,23 @@ class DriverUserController extends Controller
      */
     public function index()
     {
-        $drivers = Driver::where('user_id', '=', auth()->user()->id)->paginate();
+        $driver = Driver::where('user_id', '=', auth()->user()->id)->first();
 
-        return view('dashboard.driver.user.index', ['drivers' => $drivers]);
+        $route = Route::where('driver_id', $driver->id)->where('status', 1)->first();
+
+        $paymentsCount = 0;
+
+        if (Route::where('driver_id', $driver->id)->where('status', 1)->count() > 0) {
+            foreach($route->bookings as $booking) {
+                foreach($booking->payments as $payment) {
+                    if ($payment->paid == 1) {
+                        $paymentsCount++;
+                    }
+                }
+            }
+        }
+
+        return view('dashboard.driver.user.index', ['driver' => $driver, 'paymentsCount' => $paymentsCount]);
     }
 
     /**
@@ -88,17 +103,30 @@ class DriverUserController extends Controller
         $driver->available = $request->available ? 1 : 0;
         $driver->save();
 
-        $route = Route::where('driver_id', '=', $driver->id)->exists() 
-                    ? Route::where('driver_id', '=', $driver->id)
-                    : new Route();
+        if (Route::where('driver_id', '=', $driver->id)->exists()) {
+            
+            $route = Route::where('driver_id', '=', $driver->id)->first();
 
-        $route->driver_id = $driver->id;
-        $route->start_point = $request->start_point;
-        $route->destination = $request->destination;
-        $route->price = $request->price;
-        $route->save();
+            $route->driver_id = $driver->id;
+            $route->start_point = $request->start_point;
+            $route->destination = $request->destination;
+            $route->price = $request->price;
+            $route->status = 1;
+            $route->save();
 
-        return redirect()->route('driver-user.index')->with("Vehicle details saved successfully");
+        } else {
+
+            Route::create([
+                "driver_id" => $driver->id,
+                "start_point" => $request->start_point,
+                "destination" => $request->destination,
+                "price" => $request->price,
+                "status" => 1,
+            ]);
+
+        }
+
+        return redirect()->route('driver-user.index')->with("success", "Vehicle details saved successfully");
     }
 
     /**
